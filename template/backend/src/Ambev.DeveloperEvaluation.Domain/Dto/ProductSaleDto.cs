@@ -6,7 +6,7 @@
 public class ProductSaleDto
 {
     /// <summary>
-    /// The unique identifier of the created product
+    /// The unique identifier of the product sale
     /// </summary>
     public Guid Id { get; set; }
 
