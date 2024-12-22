@@ -25,7 +25,7 @@ public class ProductSaleConfiguration : IEntityTypeConfiguration<ProductSale>
             .HasColumnType("decimal(18,2)")
             .IsRequired();
 
-        builder.HasOne<Sale>()
+        builder.HasOne<SaleEntity>()
             .WithMany(s => s.Products)
             .HasForeignKey(p => p.SaleId)
             .OnDelete(DeleteBehavior.Cascade);

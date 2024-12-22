@@ -4,7 +4,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities;
 /// Represents a sale in the system.
 /// This entity follows domain-driven design principles and includes business rules validation.
 /// </summary>
-public class Sale
+public class SaleEntity
 {
     /// <summary>
     /// The unique identifier of the sale
@@ -44,7 +44,7 @@ public class Sale
     /// <summary>
     /// Initializes a new instance of the Sale class.
     /// </summary>
-    public Sale()
+    public SaleEntity()
     {
         Date = DateTime.UtcNow;
     }

@@ -13,14 +13,14 @@ public interface ISaleRepository
     /// <param name="sale">The sale to create</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created sale</returns>
-    Task<Sale> CreateAsync(Sale sale, CancellationToken cancellationToken = default);
+    Task<SaleEntity> CreateAsync(SaleEntity sale, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves all sales
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>All sales</returns>
-    Task<List<Sale>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<SaleEntity>> GetAllAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves a sale by their unique identifier
@@ -28,7 +28,7 @@ public interface ISaleRepository
     /// <param name="id">The unique identifier of the sale</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The sale if found, null otherwise</returns>
-    Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<SaleEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes a sale from the repository
@@ -44,5 +44,5 @@ public interface ISaleRepository
     /// <param name="sale">The sale to update</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The updated sale</returns>
-    Task<Sale> UpdateAsync(Sale sale, CancellationToken cancellationToken = default);
+    Task<SaleEntity> UpdateAsync(SaleEntity sale, CancellationToken cancellationToken = default);
 }

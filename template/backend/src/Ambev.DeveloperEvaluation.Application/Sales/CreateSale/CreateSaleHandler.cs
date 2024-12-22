@@ -38,7 +38,7 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
         //if (!validationResult.IsValid)
         //    throw new ValidationException(validationResult.Errors);
 
-        var sale = new Sale
+        var sale = new SaleEntity
         {
             Customer = command.Customer,
             Branch = command.Branch,
