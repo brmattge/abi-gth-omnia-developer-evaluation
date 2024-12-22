@@ -1,14 +1,13 @@
-using MediatR;
-using FluentValidation;
-using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
+using MediatR;
 
-namespace Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
+namespace Ambev.DeveloperEvaluation.Application.Sale.DeleteSale;
 
 /// <summary>
 /// Handler for processing DeleteSaleHandler requests
 /// </summary>
-public class DeleteSaleHandler : IRequestHandler<DeleteUserCommand, DeleteUserResponse>
+public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleResponse>
 {
     private readonly ISaleRepository _saleRepository;
 
