@@ -32,12 +32,6 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     /// <returns>The created sale details</returns>
     public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
     {
-        //var validator = new CreateUserCommandValidator();
-        //var validationResult = await validator.ValidateAsync(command, cancellationToken);
-
-        //if (!validationResult.IsValid)
-        //    throw new ValidationException(validationResult.Errors);
-
         var sale = new SaleEntity
         {
             Customer = command.Customer,
@@ -54,6 +48,6 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
 
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
 
-        return _mapper.Map<CreateSaleResult>(createdSale);
+        return new CreateSaleResult { Id = createdSale.Id };
     }
 }

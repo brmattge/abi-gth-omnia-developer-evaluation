@@ -12,7 +12,7 @@ public class ProductSaleDto
 
     /// <summary>
     /// The name of product
-    /// </summary>
+    /// </summary>  
     public string Name { get; set; } = string.Empty;
 
     /// <summary>

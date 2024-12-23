@@ -34,16 +34,4 @@ public class CreateSaleCommand : IRequest<CreateSaleResult>
     /// The products of sale
     /// </summary>
     public List<ProductSaleDto> Products { get; set; } = new List<ProductSaleDto>();
-
-
-    public ValidationResultDetail Validate()
-    {
-        //var validator = new CreateUserCommandValidator();
-        //var result = validator.Validate(this);
-        return new ValidationResultDetail
-        {
-            //IsValid = result.IsValid,
-            //Errors = result.Errors.Select(o => (ValidationErrorDetail)o)
-        };
-    }
 }

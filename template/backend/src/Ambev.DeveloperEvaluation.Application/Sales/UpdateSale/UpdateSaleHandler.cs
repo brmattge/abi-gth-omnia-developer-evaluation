@@ -32,12 +32,6 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
     /// <returns>The update sale details</returns>
     public async Task<UpdateSaleResult> Handle(UpdateSaleCommand command, CancellationToken cancellationToken)
     {
-        //var validator = new CreateUserCommandValidator();
-        //var validationResult = await validator.ValidateAsync(command, cancellationToken);
-
-        //if (!validationResult.IsValid)
-        //    throw new ValidationException(validationResult.Errors);
-
         var sale = await _saleRepository.GetByIdAsync(command.Id, cancellationToken);
 
         if (sale == null)
@@ -53,11 +47,12 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
             Quantity = p.Quantity,
             UnitPrice = p.UnitPrice
         }).ToList();
+        sale.IsCanceled = command.IsCanceled;
 
         sale.CalculateTotalSaleAmount();
 
         var updatedSale = await _saleRepository.UpdateAsync(sale, cancellationToken);
 
-        return _mapper.Map<UpdateSaleResult>(updatedSale);
+        return new UpdateSaleResult { Id = updatedSale.Id };
     }
 }

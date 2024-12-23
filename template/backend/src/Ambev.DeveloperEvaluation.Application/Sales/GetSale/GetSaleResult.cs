@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Dto;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Dto;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
@@ -12,15 +13,24 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 public class GetSaleResult
 {
     /// <summary>
-    /// Gets or sets the unique identifier of the newly created sale.
+    /// The unique identifier of the sale
     /// </summary>
-    /// <value>A GUID that uniquely identifies the created sale in the system.</value>
     public Guid Id { get; set; }
+
+    /// <summary>
+    /// The date of the sale
+    /// </summary>
+    public DateTime Date { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// The customer who purchased
     /// </summary>
     public string Customer { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The total purchase price
+    /// </summary>
+    public decimal TotalSaleAmount { get; set; }
 
     /// <summary>
     /// Where the sale was made
@@ -30,5 +40,10 @@ public class GetSaleResult
     /// <summary>
     /// The products of sale
     /// </summary>
-    public List<ProductSaleDto> Products { get; set; } = new List<ProductSaleDto>();
+    public List<ProductSale> Products { get; set; } = new List<ProductSale>();
+
+    /// <summary>
+    /// Sale is canceled true or false
+    /// </summary>
+    public bool IsCanceled { get; set; }
 }
