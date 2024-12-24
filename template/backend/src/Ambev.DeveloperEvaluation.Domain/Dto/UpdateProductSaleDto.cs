@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a DTO product inside new sale in the system.
 /// </summary>
-public class ProductSaleDto
+public class UpdateProductSaleDto
 {
     /// <summary>
     /// The unique identifier of the product sale

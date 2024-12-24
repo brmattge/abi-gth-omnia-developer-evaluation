@@ -1,4 +1,3 @@
-using Ambev.DeveloperEvaluation.Application.Sale.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using NSubstitute;

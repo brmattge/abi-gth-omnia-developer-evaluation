@@ -39,9 +39,9 @@ public class CreateSaleHandlerTests
         {
             Customer = "Customer1",
             Branch = "Branch1",
-            Products = new List<ProductSaleDto>
+            Products = new List<CreateProductSaleDto>
             {
-                new ProductSaleDto { Name = "Product1", Quantity = 2, UnitPrice = 10.0M }
+                new CreateProductSaleDto { Name = "Product1", Quantity = 2, UnitPrice = 10.0M }
             }
         };
 

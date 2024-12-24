@@ -26,7 +26,7 @@ public record UpdateSaleCommand : IRequest<UpdateSaleResult>
     /// <summary>
     /// The products of sale
     /// </summary>
-    public List<ProductSaleDto> Products { get; set; } = new List<ProductSaleDto>();
+    public List<UpdateProductSaleDto> Products { get; set; } = new List<UpdateProductSaleDto>();
 
     /// <summary>
     /// Sale is canceled true or false

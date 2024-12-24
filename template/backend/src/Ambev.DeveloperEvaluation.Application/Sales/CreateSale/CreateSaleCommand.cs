@@ -1,5 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Common.Validation;
-using Ambev.DeveloperEvaluation.Dto;
+﻿using Ambev.DeveloperEvaluation.Dto;
 using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
@@ -33,5 +32,5 @@ public class CreateSaleCommand : IRequest<CreateSaleResult>
     /// <summary>
     /// The products of sale
     /// </summary>
-    public List<ProductSaleDto> Products { get; set; } = new List<ProductSaleDto>();
+    public List<CreateProductSaleDto> Products { get; set; } = new List<CreateProductSaleDto>();
 }

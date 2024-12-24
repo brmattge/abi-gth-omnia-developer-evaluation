@@ -1,11 +1,9 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.Domain.Validation;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
 /// <summary>
-/// Validator for CreateUserCommand that defines validation rules for sale creation command.
+/// Validator for CreateSaleCommand that defines validation rules for sale creation command.
 /// </summary>
 public class CreateSaleCommandValidator : AbstractValidator<CreateSaleCommand>
 {

@@ -20,5 +20,5 @@ public class CreateSaleRequest
     /// <summary>
     /// The products of sale
     /// </summary>
-    public List<ProductSaleDto> Products { get; set; } = new List<ProductSaleDto>();
+    public List<CreateProductSaleDto> Products { get; set; } = new List<CreateProductSaleDto>();
 }

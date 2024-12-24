@@ -2,7 +2,7 @@ using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using MediatR;
 
-namespace Ambev.DeveloperEvaluation.Application.Sale.DeleteSale;
+namespace Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 
 /// <summary>
 /// Handler for processing DeleteSaleHandler requests

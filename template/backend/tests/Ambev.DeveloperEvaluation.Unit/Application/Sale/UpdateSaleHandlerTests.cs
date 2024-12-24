@@ -40,9 +40,9 @@ public class UpdateSaleHandlerTests
             Id = Guid.NewGuid(),
             Customer = "UpdatedCustomer",
             Branch = "UpdatedBranch",
-            Products = new List<ProductSaleDto>
+            Products = new List<UpdateProductSaleDto>
             {
-                new ProductSaleDto { Name = "UpdatedProduct", Quantity = 5, UnitPrice = 15.0M }
+                new UpdateProductSaleDto { Name = "UpdatedProduct", Quantity = 5, UnitPrice = 15.0M }
             },
             IsCanceled = true
         };
