@@ -1,4 +1,3 @@
-using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
@@ -26,8 +25,7 @@ public class GetSaleHandlerTests
         _saleRepository = Substitute.For<ISaleRepository>();
 
         // Configuração real do AutoMapper
-        var config = new MapperConfiguration(cfg =>
-        {
+        var config = new MapperConfiguration(cfg => {
             cfg.CreateMap<SaleEntity, GetSaleResult>();
         });
         _mapper = config.CreateMapper();
