@@ -1,5 +1,7 @@
-﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+﻿using Ambev.DeveloperEvaluation.Application.Eventing;
+using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using MediatR;
@@ -15,6 +17,7 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
     private readonly ISaleRepository _saleRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<UpdateSaleHandler> _logger;
+    private readonly IEventPublisher _eventPublisher;
 
     /// <summary>
     /// Initializes a new instance of UpdateSaleHandler
@@ -22,11 +25,17 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
     /// <param name="saleRepository">The sale repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="logger">The ILogger instance</param>
-    public UpdateSaleHandler(ISaleRepository saleRepository, IMapper mapper, ILogger<UpdateSaleHandler> logger)
+    /// <param name="eventPublisher">The EventPublisher instance to publish events for sale</param>
+    public UpdateSaleHandler(
+        ISaleRepository saleRepository, 
+        IMapper mapper, 
+        ILogger<UpdateSaleHandler> logger, 
+        IEventPublisher eventPublisher)
     {
         _saleRepository = saleRepository;
         _mapper = mapper;
         _logger = logger;
+        _eventPublisher = eventPublisher;
     }
 
     /// <summary>
@@ -51,7 +60,7 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
         sale.Customer = command.Customer;
         sale.Branch = command.Branch;
         sale.Products = command.Products.Select(p => {
-            ValidateProductQuantity(p.Quantity);
+            ValidateProductQuantity(command.Customer, p.Quantity);
 
             var productSale = new ProductSale
             {
@@ -72,13 +81,17 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
 
         _logger.LogInformation("Sale with ID {SaleId} updated successfully", updatedSale.Id);
 
+        await PublishSaleUpdatedEventAsync(updatedSale, cancellationToken);
+
         return new UpdateSaleResult { Id = updatedSale.Id };
     }
 
-    private void ValidateProductQuantity(int quantity)
+    private void ValidateProductQuantity(string customer, int quantity)
     {
         if (quantity > 20)
         {
+            _logger.LogInformation("Customer {Customer} is attempting to purchase more than 20 identical items.", customer);
+
             throw new InvalidOperationException("Is not possible to sell more than 20 identical items.");
         }
     }
@@ -92,5 +105,11 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
         {
             productSale.UnitPrice *= 0.8m; // 20% discount
         }
+    }
+
+    private async Task PublishSaleUpdatedEventAsync(SaleEntity updatedSale, CancellationToken cancellationToken)
+    {
+        var saleUpdatedEvent = new SaleUpdatedEvent(updatedSale.Id, updatedSale.Customer, updatedSale.TotalSaleAmount, updatedSale.IsCanceled);
+        await _eventPublisher.PublishAsync(saleUpdatedEvent, cancellationToken);
     }
 }

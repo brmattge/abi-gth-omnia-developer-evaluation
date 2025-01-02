@@ -1,3 +1,5 @@
+using Ambev.DeveloperEvaluation.Application.Eventing;
+using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,16 +13,22 @@ public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleRe
 {
     private readonly ISaleRepository _saleRepository;
     private readonly ILogger<DeleteSaleHandler> _logger;
+    private readonly IEventPublisher _eventPublisher;
 
     /// <summary>
     /// Initializes a new instance of DeleteUserHandler
     /// </summary>
     /// <param name="saleRepository">The sale repository</param>
     /// <param name="logger">The ILogger instance</param>
-    public DeleteSaleHandler(ISaleRepository saleRepository, ILogger<DeleteSaleHandler> logger)
+    /// <param name="eventPublisher">The EventPublisher instance to publish events for sale</param>
+    public DeleteSaleHandler(
+        ISaleRepository saleRepository,
+        ILogger<DeleteSaleHandler> logger,
+        IEventPublisher eventPublisher)
     {
         _saleRepository = saleRepository;
         _logger = logger;
+        _eventPublisher = eventPublisher;
     }
 
     /// <summary>
@@ -41,6 +49,14 @@ public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleRe
 
         _logger.LogInformation("Sale with ID {SaleId} deleted successfully", request.Id);
 
+        await PublishSaleDeletedEventAsync(request.Id, cancellationToken);
+
         return new DeleteSaleResponse { Success = true };
+    }
+
+    private async Task PublishSaleDeletedEventAsync(Guid SaleId, CancellationToken cancellationToken)
+    {
+        var saleDeletedEvent = new SaleDeletedEvent(SaleId);
+        await _eventPublisher.PublishAsync(saleDeletedEvent, cancellationToken);
     }
 }

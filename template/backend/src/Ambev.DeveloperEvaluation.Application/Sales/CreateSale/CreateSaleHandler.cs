@@ -1,4 +1,6 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using Ambev.DeveloperEvaluation.Application.Eventing;
+using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using MediatR;
@@ -14,6 +16,7 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     private readonly ISaleRepository _saleRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<CreateSaleHandler> _logger;
+    private readonly IEventPublisher _eventPublisher;
 
     /// <summary>
     /// Initializes a new instance of CreateSaleHandler
@@ -21,11 +24,17 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     /// <param name="saleRepository">The sale repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="logger">The ILogger instance</param>
-    public CreateSaleHandler(ISaleRepository saleRepository, IMapper mapper, ILogger<CreateSaleHandler> logger)
+    /// <param name="eventPublisher">The EventPublisher instance to publish events for sale</param>
+    public CreateSaleHandler(
+        ISaleRepository saleRepository, 
+        IMapper mapper, 
+        ILogger<CreateSaleHandler> logger, 
+        IEventPublisher eventPublisher)
     {
         _saleRepository = saleRepository;
         _mapper = mapper;
         _logger = logger;
+        _eventPublisher = eventPublisher;
     }
 
     /// <summary>
@@ -43,7 +52,7 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
             Customer = command.Customer,
             Branch = command.Branch,
             Products = command.Products.Select(p => {
-                ValidateProductQuantity(p.Quantity);
+                ValidateProductQuantity(command.Customer, p.Quantity);
 
                 var productSale = new ProductSale
                 {
@@ -63,13 +72,17 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
 
         _logger.LogInformation("Sale created successfully with ID {SaleId}", createdSale.Id);
 
+        await PublishSaleCreatedEventAsync(createdSale, cancellationToken);
+
         return new CreateSaleResult { Id = createdSale.Id };
     }
 
-    private void ValidateProductQuantity(int quantity)
+    private void ValidateProductQuantity(string customer, int quantity)
     {
         if (quantity > 20)
         {
+            _logger.LogInformation("Customer {Customer} is attempting to purchase more than 20 identical items.", customer);
+
             throw new InvalidOperationException("Is not possible to sell more than 20 identical items.");
         }
     }
@@ -83,5 +96,11 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
         {
             productSale.UnitPrice *= 0.8m; // 20% discount
         }
+    }
+
+    private async Task PublishSaleCreatedEventAsync(SaleEntity createdSale, CancellationToken cancellationToken)
+    {
+        var saleCreatedEvent = new SaleCreatedEvent(createdSale.Id, createdSale.Customer, createdSale.TotalSaleAmount);
+        await _eventPublisher.PublishAsync(saleCreatedEvent, cancellationToken);
     }
 }
