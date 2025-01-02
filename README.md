@@ -11,6 +11,11 @@
 - The repository must provide instructions on how to configure, execute and test the project
 - Documentation and overall organization will also be taken into consideration
 
+## Running Migrations
+**Important**: To run the localhost project, make sure to follow the instructions below to run migrations and set up the database.
+
+See [How to run migrations in your project](/.doc/how-to-migration.md)
+
 ## Use Case
 **You are a developer on the DeveloperStore team. Now we need to implement the API prototypes.**
 
